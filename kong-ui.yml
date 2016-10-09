@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    name: kong-ui
+  name: kong-ui-app
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 8080
+      name: http
+  selector:
+    name: kong-ui
+---
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  labels:
+    name: kong-ui
+  name: kong-ui-app
+spec:
+  replicas: 1
+  selector:
+    name: kong-ui
+  template:
+    metadata:
+      labels:
+        name: kong-ui
+    spec:
+      containers:
+        - name: kong-app-ui
+          image: pgbi/kong-dashboard
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+

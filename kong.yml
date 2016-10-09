@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    name: kong
+  name: kong-app
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 8000
+      targetPort: 8000
+      name: http
+    - port: 8443
+      targetPort: 8443
+      name: https
+    - port: 8001
+      targetPort: 8001
+      name: admin
+  selector:
+    name: kong
+---
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  labels:
+    name: kong
+  name: kong-app
+spec:
+  replicas: 1
+  selector:
+    name: kong
+  template:
+    metadata:
+      labels:
+        name: kong
+    spec:
+      imagePullSecrets:
+        - name: moocheriokey
+      containers:
+        - name: kong-app
+          image: mashape/kong
+          env:
+            - name: KONG_DATABASE
+              value: cassandra
+            - name: KONG_CASSANDRA_CONTACT_POINTS
+              value: cassandra
+          ports:
+            - containerPort: 8000
+            - containerPort: 8001
+            - containerPort: 8443
+            - containerPort: 7946
+            - containerPort: 7946
+              protocol: UDP
+
