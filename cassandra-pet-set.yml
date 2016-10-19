@@ -65,9 +65,9 @@ spec:
           - name: HEAP_NEWSIZE
             value: 200M
           - name: CASSANDRA_SEEDS
-            value: "cassandra-0.cassandra,cassandra-1.cassandra,cassandra-2.cassandra"
+            value: "cassandra-0,cassandra-1,cassandra-2"
           - name: PEER_DISCOVERY_SERVICE
-            value: "cassandra-0.cassandra,cassandra-1.cassandra,cassandra-2.cassandra"
+            value: "cassandra-0,cassandra-1,cassandra-2"
 #          - name: CASSANDRA_ENDPOINT_SNITCH
 #           value: GossipingPropertyFileSnitch
           - name: CASSANDRA_ENDPOINT_SNITCH
@@ -75,7 +75,7 @@ spec:
           - name: CASSANDRA_CLUSTER_NAME
             value: "Kong"
           - name: CASSANDRA_DC
-            value: "MAD-DC1"
+            value: "$(DC)"
           - name: CASSANDRA_RACK
             value: "Kong-Rack1"
           - name: CASSANDRA_AUTO_BOOTSTRAP

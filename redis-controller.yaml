@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: redis
+spec:
+  replicas: 1
+  selector:
+    name: redis
+  template:
+    metadata:
+      labels:
+        name: redis
+    spec:
+      containers:
+      - name: redis
+        image: gcr.io/google_containers/redis:v1
+        ports:
+        - containerPort: 6379
+        resources:
+          limits:
+            cpu: "0.1"
+        volumeMounts:
+        - mountPath: /redis-master-data
+          name: data
+      volumes:
+        - name: data
+          emptyDir: {}
+
+#        volumeMounts:
+#        - mountPath: /redis-master-data
+#          name: master-data
+#        - mountPath: /redis-slave
+#          name: slave-data
+#      volumes:
+#        - name: master-data
+#          hostPath: 
+#            path: /redis-master-data
+#        - name: slave-data
+#          hostPath:
+#            path: /redis-slave
+
