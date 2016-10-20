@@ -48,7 +48,7 @@ spec:
         - name: moocheriokey
       containers:
       - name: cassandra
-        image: registry.docker.moocher.io/moocherio/cassandra:latest
+        image: cassandra:2.2.8
         imagePullPolicy: Always
         ports:
         - containerPort: 7000
@@ -65,19 +65,19 @@ spec:
           - name: HEAP_NEWSIZE
             value: 200M
           - name: CASSANDRA_SEEDS
-            value: "cassandra-0,cassandra-1,cassandra-2"
+            value: "cassandra-0.cassandra,cassandra-1.cassandra,cassandra-2.cassandra"
           - name: PEER_DISCOVERY_SERVICE
-            value: "cassandra-0,cassandra-1,cassandra-2"
-#          - name: CASSANDRA_ENDPOINT_SNITCH
-#           value: GossipingPropertyFileSnitch
+            value: "cassandra-0.cassandra,cassandra-1.cassandra,cassandra-2.cassandra"
           - name: CASSANDRA_ENDPOINT_SNITCH
             value: GossipingPropertyFileSnitch
           - name: CASSANDRA_CLUSTER_NAME
             value: "Kong"
           - name: CASSANDRA_DC
-            value: "$(DC)"
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
           - name: CASSANDRA_RACK
-            value: "Kong-Rack1"
+            value: "Kong-Rack"
           - name: CASSANDRA_AUTO_BOOTSTRAP
             value: "false"
           - name: POD_NAMESPACE
@@ -90,6 +90,7 @@ spec:
 #            - /bin/bash
 #            - -c
 #            - /ready-probe.sh
+#            - find / -name "cassandra-rackdc.properties"
 #          initialDelaySeconds: 15
 #          timeoutSeconds: 5
         # These volume mounts are persistent. They are like inline claims,
